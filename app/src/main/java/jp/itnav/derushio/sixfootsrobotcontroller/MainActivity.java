@@ -1,22 +1,16 @@
 package jp.itnav.derushio.sixfootsrobotcontroller;
 
-import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.Set;
 
 import jp.itnav.derushio.bluetoothmanager.BluetoothManagedActivity;
 
 
 public class MainActivity extends BluetoothManagedActivity {
-	private LinearLayout btDevicesHolder;
 
 	private OnButtonTouchListener onButtonTouchListener = new OnButtonTouchListener();
 
@@ -29,12 +23,12 @@ public class MainActivity extends BluetoothManagedActivity {
 	private Button buttonLaunch;
 	private Button buttonStop;
 
+	private boolean isSelected = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		btDevicesHolder = (LinearLayout) findViewById(R.id.paredDevicesHolder);
 
 		buttonForward = (Button) findViewById(R.id.buttonForward);
 		buttonBack = (Button) findViewById(R.id.buttonBack);
@@ -53,22 +47,17 @@ public class MainActivity extends BluetoothManagedActivity {
 		buttonDown.setOnTouchListener(onButtonTouchListener);
 		buttonLaunch.setOnTouchListener(onButtonTouchListener);
 		buttonStop.setOnTouchListener(onButtonTouchListener);
-
-		Set<BluetoothDevice> paredDevices = getParedDevices();
-		for (final BluetoothDevice paredDevice : paredDevices) {
-			final TextView textView = new TextView(this);
-			textView.setText(paredDevice.getName());
-			textView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					setTargetDevice(paredDevice);
-					connectDevice();
-				}
-			});
-			btDevicesHolder.addView(textView);
-		}
 	}
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+
+		if (hasFocus && !isSelected) {
+			showDeviceSelectDialog();
+			isSelected = true;
+		}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,6 +73,15 @@ public class MainActivity extends BluetoothManagedActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		switch (id) {
+			case R.id.action_select_device:
+				showDeviceSelectDialog();
+				break;
+			case R.id.action_reconnect_device:
+				reConnectDevice();
+				break;
+			case R.id.action_disconnect_device:
+				disConnectDevices();
+				break;
 			case R.id.action_programing_mode:
 				break;
 			case R.id.action_settings:
