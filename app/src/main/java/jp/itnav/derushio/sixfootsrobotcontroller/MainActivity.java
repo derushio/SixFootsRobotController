@@ -4,7 +4,9 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,12 +18,41 @@ import jp.itnav.derushio.bluetoothmanager.BluetoothManagedActivity;
 public class MainActivity extends BluetoothManagedActivity {
 	private LinearLayout btDevicesHolder;
 
+	private OnButtonTouchListener onButtonTouchListener = new OnButtonTouchListener();
+
+	private Button buttonForward;
+	private Button buttonBack;
+	private Button buttonLeft;
+	private Button buttonRight;
+	private Button buttonUp;
+	private Button buttonDown;
+	private Button buttonLaunch;
+	private Button buttonStop;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		btDevicesHolder = (LinearLayout) findViewById(R.id.paredDevicesHolder);
+
+		buttonForward = (Button) findViewById(R.id.buttonForward);
+		buttonBack = (Button) findViewById(R.id.buttonBack);
+		buttonLeft = (Button) findViewById(R.id.buttonLeft);
+		buttonRight = (Button) findViewById(R.id.buttonRight);
+		buttonUp = (Button) findViewById(R.id.buttonUp);
+		buttonDown = (Button) findViewById(R.id.buttonDown);
+		buttonLaunch = (Button) findViewById(R.id.buttonLaunch);
+		buttonStop = (Button) findViewById(R.id.buttonStop);
+
+		buttonForward.setOnTouchListener(onButtonTouchListener);
+		buttonBack.setOnTouchListener(onButtonTouchListener);
+		buttonLeft.setOnTouchListener(onButtonTouchListener);
+		buttonRight.setOnTouchListener(onButtonTouchListener);
+		buttonUp.setOnTouchListener(onButtonTouchListener);
+		buttonDown.setOnTouchListener(onButtonTouchListener);
+		buttonLaunch.setOnTouchListener(onButtonTouchListener);
+		buttonStop.setOnTouchListener(onButtonTouchListener);
 
 		Set<BluetoothDevice> paredDevices = getParedDevices();
 		for (final BluetoothDevice paredDevice : paredDevices) {
@@ -52,41 +83,70 @@ public class MainActivity extends BluetoothManagedActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+			case R.id.action_programing_mode:
+				break;
+			case R.id.action_settings:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void startRun(View v) {
-		writeMessage("f");
-	}
+	private class OnButtonTouchListener implements View.OnTouchListener {
 
-	public void stop(View v) {
-		writeMessage("o");
-	}
-
-	public void back(View v) {
-		writeMessage("b");
-	}
-
-	public void left(View v) {
-		writeMessage("l");
-	}
-
-	public void right(View v) {
-		writeMessage("r");
-	}
-
-	public void hassya(View v) {
-		writeMessage("h");
-	}
-
-	public void up(View v) {
-		writeMessage("u");
-	}
-
-	public void down(View v) {
-		writeMessage("d");
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					switch (v.getId()) {
+						case R.id.buttonForward:
+							writeMessage("fw");
+							break;
+						case R.id.buttonBack:
+							writeMessage("bc");
+							break;
+						case R.id.buttonLeft:
+							writeMessage("le");
+							break;
+						case R.id.buttonRight:
+							writeMessage("ri");
+							break;
+						case R.id.buttonUp:
+							writeMessage("up");
+							break;
+						case R.id.buttonDown:
+							writeMessage("dw");
+							break;
+						case R.id.buttonLaunch:
+							writeMessage("sh");
+							break;
+						case R.id.buttonStop:
+							break;
+					}
+					break;
+				case MotionEvent.ACTION_UP:
+					switch (v.getId()) {
+						case R.id.buttonForward:
+						case R.id.buttonBack:
+							writeMessage("so");
+							break;
+						case R.id.buttonLeft:
+						case R.id.buttonRight:
+							writeMessage("ss");
+							break;
+						case R.id.buttonUp:
+						case R.id.buttonDown:
+							writeMessage("st");
+							break;
+						case R.id.buttonLaunch:
+							writeMessage("sf");
+							break;
+						case R.id.buttonStop:
+							break;
+					}
+					break;
+			}
+			return false;
+		}
 	}
 }
