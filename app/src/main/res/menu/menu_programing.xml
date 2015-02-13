@@ -2,8 +2,27 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="jp.itnav.derushio.sixfootsrobotcontroller.ProgramingActivity">
-	<item android:id="@+id/action_settings"
-	      android:title="@string/action_settings"
-	      android:orderInCategory="100"
-	      app:showAsAction="never"/>
+	<item
+		android:id="@+id/action_select_device"
+		android:title="SelectDevice"
+		android:orderInCategory="100"
+		app:showAsAction="never"/>
+
+	<item
+		android:id="@+id/action_reconnect_device"
+		android:title="ReconnectDevice"
+		android:orderInCategory="100"
+		app:showAsAction="never"/>
+
+	<item
+		android:id="@+id/action_disconnect_device"
+		android:title="DisConnect"
+		android:orderInCategory="100"
+		app:showAsAction="never"/>
+
+	<item
+		android:id="@+id/action_controller_mode"
+		android:title="ControllerMode"
+		android:orderInCategory="100"
+		app:showAsAction="never"/>
 </menu>

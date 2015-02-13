@@ -1,5 +1,6 @@
 package jp.itnav.derushio.sixfootsrobotcontroller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,11 +81,12 @@ public class MainActivity extends BluetoothManagedActivity {
 				reConnectDevice();
 				break;
 			case R.id.action_disconnect_device:
-				disConnectDevices();
+				disConnectDevice();
 				break;
 			case R.id.action_programing_mode:
-				break;
-			case R.id.action_settings:
+				Intent intent = new Intent(this, ProgramingActivity.class);
+				startActivity(intent);
+				finish();
 				break;
 		}
 		return super.onOptionsItemSelected(item);
