@@ -29,6 +29,24 @@ public class ActionItem extends LinearLayout {
 		actionOptionText = (TextView) findViewById(R.id.action_option);
 
 		actionNameText.setText(item.ACTION_NAME);
-		actionOptionText.setText(item.ACTION_OPTION);
+
+		switch (item.ACTION_OPTION) {
+			case 0:
+				actionOptionText.setText("停止");
+				break;
+			case 1:
+				actionOptionText.setText("正転");
+				break;
+			case -1:
+				actionOptionText.setText("逆転");
+				break;
+			default:
+				actionOptionText.setText("" + item.ACTION_OPTION);
+				break;
+		}
+	}
+
+	public ITEM getItem() {
+		return item;
 	}
 }

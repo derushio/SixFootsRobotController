@@ -1,17 +1,28 @@
 package jp.itnav.derushio.sixfootsrobotcontroller;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import jp.itnav.derushio.bluetoothmanager.BluetoothManagedActivity;
+import jp.itnav.derushio.sixfootsrobotcontroller.item.ActionItem;
+import jp.itnav.derushio.sixfootsrobotcontroller.item.ITEM;
+import jp.itnav.derushio.sixfootsrobotcontroller.item.ItemSelectDialog;
+import jp.itnav.derushio.sixfootsrobotcontroller.item.OnItemSelectListener;
 
 
-public class ProgramingActivity extends BluetoothManagedActivity {
+public class ProgramingActivity extends BluetoothManagedActivity implements OnItemSelectListener {
 
 	private LinearLayout actionHolder;
+	private ArrayList<ActionItem> actionItems;
 
 	private boolean isSelected = false;
 
@@ -20,7 +31,27 @@ public class ProgramingActivity extends BluetoothManagedActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_programing);
 
-		actionHolder = (LinearLayout)findViewById(R.id.action_holder);
+		actionHolder = (LinearLayout) findViewById(R.id.action_holder);
+		actionItems = new ArrayList<>();
+
+		ActionItem actionItem = new ActionItem(this, new ITEM(ITEM.ACTION_STOP, 0));
+		actionItems.add(actionItem);
+
+		Button button = new Button(this);
+		button.setText("新規動作");
+		button.setTextSize(20);
+		button.setTextColor(Color.BLACK);
+		button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ItemSelectDialog itemSelectDialog = new ItemSelectDialog(ProgramingActivity.this);
+				itemSelectDialog.setOnItemSelectListener(ProgramingActivity.this);
+				itemSelectDialog.show();
+			}
+		});
+
+		actionHolder.addView(button);
 	}
 
 	@Override
@@ -64,5 +95,87 @@ public class ProgramingActivity extends BluetoothManagedActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void initProgram(View v) {
+		executeAction(new ITEM(ITEM.ACTION_MOVE, 0));
+	}
+
+	public void runProgram(View v) {
+		for (ActionItem actionItem : actionItems) {
+			executeAction(actionItem.getItem());
+		}
+	}
+
+	private boolean executeAction(ITEM item) {
+		try {
+			if (item.ACTION_NAME.equals(ITEM.ACTION_MOVE)) {
+				switch (item.ACTION_OPTION) {
+					case 0:
+						writeMessage("so");
+						break;
+					case 1:
+						writeMessage("fw");
+						break;
+					case -1:
+						writeMessage("bc");
+						break;
+				}
+			} else if (item.ACTION_NAME.equals(ITEM.ACTION_TURN)) {
+				switch (item.ACTION_OPTION) {
+					case 0:
+						writeMessage("ss");
+						break;
+					case 1:
+						writeMessage("le");
+						break;
+					case -1:
+						writeMessage("ri");
+						break;
+				}
+			} else if (item.ACTION_NAME.equals(ITEM.ACTION_UP_DOWN)) {
+				switch (item.ACTION_OPTION) {
+					case 0:
+						writeMessage("st");
+						break;
+					case 1:
+						writeMessage("up");
+						break;
+					case -1:
+						writeMessage("dw");
+						break;
+				}
+			} else if (item.ACTION_NAME.equals(ITEM.ACTION_CYCLE)) {
+				switch (item.ACTION_OPTION) {
+					case 0:
+						writeMessage("sf");
+						break;
+					case 1:
+						writeMessage("sh");
+						break;
+				}
+			} else if (item.ACTION_NAME.equals(ITEM.ACTION_WAIT)) {
+				sleep(item.ACTION_OPTION);
+			} else if (item.ACTION_NAME.equals(ITEM.ACTION_STOP)) {
+				writeMessage("sossstsf");
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void onItemSelected(ITEM item) {
+		ActionItem actionItem = new ActionItem(this, item);
+		actionHolder.addView(actionItem, actionItems.size() - 1);
+		actionItems.add(actionItems.size() - 1, actionItem);
+	}
+
+	public synchronized void sleep(long delayMilliSec) {
+		try {
+			wait(delayMilliSec);
+		} catch (InterruptedException e) {
+		}
 	}
 }

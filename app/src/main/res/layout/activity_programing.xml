@@ -19,7 +19,8 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:text="初期化"/>
+			android:text="初期化"
+			android:onClick="initProgram"/>
 	</LinearLayout>
 
 	<ScrollView
@@ -43,7 +44,8 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:text="RUN"/>
+			android:text="RUN"
+			android:onClick="runProgram"/>
 	</LinearLayout>
 
 </LinearLayout>
