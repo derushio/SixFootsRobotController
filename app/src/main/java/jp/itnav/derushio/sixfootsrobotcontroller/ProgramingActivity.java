@@ -34,24 +34,7 @@ public class ProgramingActivity extends BluetoothManagedActivity implements OnIt
 		actionHolder = (LinearLayout) findViewById(R.id.action_holder);
 		actionItems = new ArrayList<>();
 
-		ActionItem actionItem = new ActionItem(this, new ITEM(ITEM.ACTION_STOP, 0));
-		actionItems.add(actionItem);
-
-		Button button = new Button(this);
-		button.setText("新規動作");
-		button.setTextSize(20);
-		button.setTextColor(Color.BLACK);
-		button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ItemSelectDialog itemSelectDialog = new ItemSelectDialog(ProgramingActivity.this);
-				itemSelectDialog.setOnItemSelectListener(ProgramingActivity.this);
-				itemSelectDialog.show();
-			}
-		});
-
-		actionHolder.addView(button);
+		initProgram(null);
 	}
 
 	@Override
@@ -98,7 +81,28 @@ public class ProgramingActivity extends BluetoothManagedActivity implements OnIt
 	}
 
 	public void initProgram(View v) {
-		executeAction(new ITEM(ITEM.ACTION_MOVE, 0));
+		actionItems.clear();
+		actionHolder.removeAllViews();
+
+		ActionItem actionItem = new ActionItem(this, new ITEM(ITEM.ACTION_STOP, 0));
+		actionItems.add(actionItem);
+
+		Button button = new Button(this);
+		button.setText("新規動作");
+		button.setTextSize(20);
+		button.setTextColor(Color.WHITE);
+		button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ItemSelectDialog itemSelectDialog = new ItemSelectDialog(ProgramingActivity.this);
+				itemSelectDialog.setOnItemSelectListener(ProgramingActivity.this);
+				itemSelectDialog.show();
+			}
+		});
+		button.setBackgroundResource(R.drawable.selector_button_background);
+
+		actionHolder.addView(button);
 	}
 
 	public void runProgram(View v) {
@@ -114,10 +118,10 @@ public class ProgramingActivity extends BluetoothManagedActivity implements OnIt
 					case 0:
 						writeMessage("so");
 						break;
-					case 1:
+					case 2:
 						writeMessage("fw");
 						break;
-					case -1:
+					case -2:
 						writeMessage("bc");
 						break;
 				}
@@ -126,10 +130,10 @@ public class ProgramingActivity extends BluetoothManagedActivity implements OnIt
 					case 0:
 						writeMessage("ss");
 						break;
-					case 1:
+					case 3:
 						writeMessage("le");
 						break;
-					case -1:
+					case -3:
 						writeMessage("ri");
 						break;
 				}
@@ -138,10 +142,10 @@ public class ProgramingActivity extends BluetoothManagedActivity implements OnIt
 					case 0:
 						writeMessage("st");
 						break;
-					case 1:
+					case 4:
 						writeMessage("up");
 						break;
-					case -1:
+					case -4:
 						writeMessage("dw");
 						break;
 				}

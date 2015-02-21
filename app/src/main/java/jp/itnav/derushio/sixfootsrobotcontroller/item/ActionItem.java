@@ -40,6 +40,24 @@ public class ActionItem extends LinearLayout {
 			case -1:
 				actionOptionText.setText("逆転");
 				break;
+			case 2:
+				actionOptionText.setText("前進");
+				break;
+			case -2:
+				actionOptionText.setText("後進");
+				break;
+			case 3:
+				actionOptionText.setText("左回転");
+				break;
+			case -3:
+				actionOptionText.setText("右回転");
+				break;
+			case 4:
+				actionOptionText.setText("上昇");
+				break;
+			case -4:
+				actionOptionText.setText("下降");
+				break;
 			default:
 				actionOptionText.setText("" + item.ACTION_OPTION);
 				break;
